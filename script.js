@@ -188,8 +188,8 @@ const aiStockImages = [
 let aiStockTimer = null;
 let aiStockIndex = 0; // current displayed index
 let aiStockRunning = false;
-const aiDisplayDuration = 1200; // ms each image stays visible (1.2s)
-const aiFadeDuration = 400; // ms for fade transition
+const aiDisplayDuration = 2200; // ms each image stays visible (1.2s)
+const aiFadeDuration = 650; // ms for fade transition
 
 // ensure transition style
 if (aiStockAnalyzerImage) {
