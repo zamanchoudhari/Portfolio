@@ -2,7 +2,7 @@ const heroSection = document.querySelector('.hero');
 const heroFrame = document.getElementById('heroFrame');
 const totalFrames = 300;
 const frameSources = Array.from({ length: totalFrames }, (_, index) =>
-  `ezgif-frame-${String(index + 1).padStart(3, '0')}.jpg`
+  `ezgif-frame-${String(index + 1).padStart(3, '0')}.webp`
 );
 
 let frameIndex = 0;
@@ -180,10 +180,10 @@ const errorMessages = Array.from(contactForm ? contactForm.querySelectorAll('.er
 
 const aiStockAnalyzerImage = document.getElementById('aiStockAnalyzerImage');
 const aiStockImages = [
-  'assets/images/pic1.png',
-  'assets/images/pic2.png',
-  'assets/images/pic3.png',
-  'assets/images/pic4.png'
+  'assets/images/pic1.webp',
+  'assets/images/pic2.webp',
+  'assets/images/pic3.webp',
+  'assets/images/pic4.webp'
 ];
 let aiStockTimer = null;
 let aiStockIndex = 0; // current displayed index
@@ -433,10 +433,10 @@ if (contactForm) {
 
 const adminProjectCard = document.querySelector('.admin-project-card');
 const adminProjectImages = [
-  'assets/images/pho1.png',
-  'assets/images/pho2.png',
-  'assets/images/pho3.png',
-  'assets/images/pho4.png'
+  'assets/images/pho1.webp',
+  'assets/images/pho2.webp',
+  'assets/images/pho3.webp',
+  'assets/images/pho4.webp'
 ];
 const adminProjectImageA = document.getElementById('adminProjectImageA');
 const adminProjectImageB = document.getElementById('adminProjectImageB');
