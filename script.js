@@ -431,6 +431,107 @@ if (contactForm) {
   }
 }
 
+const adminProjectCard = document.querySelector('.admin-project-card');
+const adminProjectImages = [
+  'assets/images/pho1.png',
+  'assets/images/pho2.png',
+  'assets/images/pho3.png',
+  'assets/images/pho4.png'
+];
+const adminProjectImageA = document.getElementById('adminProjectImageA');
+const adminProjectImageB = document.getElementById('adminProjectImageB');
+let adminProjectTimer = null;
+let adminProjectIndex = 0;
+let adminProjectActiveLayer = 0;
+let adminProjectRunning = false;
+const adminProjectDisplay = 2200; // ms each image stays visible
+const adminProjectFade = 650; // ms cross-fade duration
+
+function preloadAdminProjectImages() {
+  adminProjectImages.forEach((src) => {
+    const img = new Image();
+    img.src = src;
+  });
+}
+
+function setAdminProjectDefault() {
+  adminProjectIndex = 0;
+  adminProjectActiveLayer = 0;
+  if (adminProjectImageA) {
+    adminProjectImageA.src = adminProjectImages[0];
+    adminProjectImageA.style.opacity = '1';
+  }
+  if (adminProjectImageB) {
+    adminProjectImageB.src = adminProjectImages[0];
+    adminProjectImageB.style.opacity = '0';
+  }
+}
+
+function scheduleAdminProjectNext() {
+  if (!adminProjectRunning) return;
+  adminProjectTimer = setTimeout(() => {
+    if (!adminProjectRunning) return;
+
+    const nextIndex = (adminProjectIndex + 1) % adminProjectImages.length;
+    const nextLayer = adminProjectActiveLayer === 0 ? adminProjectImageB : adminProjectImageA;
+    const currentLayer = adminProjectActiveLayer === 0 ? adminProjectImageA : adminProjectImageB;
+    const nextSrc = adminProjectImages[nextIndex];
+
+    if (!nextLayer || !currentLayer) return;
+
+    const tmp = new Image();
+    tmp.onload = () => {
+      nextLayer.src = nextSrc;
+      nextLayer.style.transition = `opacity ${adminProjectFade}ms ease`;
+      currentLayer.style.transition = `opacity ${adminProjectFade}ms ease`;
+      nextLayer.style.opacity = '1';
+      currentLayer.style.opacity = '0';
+      adminProjectActiveLayer = adminProjectActiveLayer === 0 ? 1 : 0;
+      adminProjectIndex = nextIndex;
+      scheduleAdminProjectNext();
+    };
+    tmp.onerror = () => {
+      adminProjectIndex = nextIndex;
+      scheduleAdminProjectNext();
+    };
+    tmp.src = nextSrc;
+  }, adminProjectDisplay);
+}
+
+function startAdminProjectHoverAnimation() {
+  if (!adminProjectCard || adminProjectRunning || !adminProjectImageA || !adminProjectImageB) return;
+  adminProjectRunning = true;
+  setAdminProjectDefault();
+  preloadAdminProjectImages();
+  scheduleAdminProjectNext();
+}
+
+function stopAdminProjectHoverAnimation() {
+  adminProjectRunning = false;
+  if (adminProjectTimer) {
+    clearTimeout(adminProjectTimer);
+    adminProjectTimer = null;
+  }
+  if (!adminProjectImageA || !adminProjectImageB) return;
+
+  const currentLayer = adminProjectActiveLayer === 0 ? adminProjectImageA : adminProjectImageB;
+  const resetLayer = adminProjectActiveLayer === 0 ? adminProjectImageB : adminProjectImageA;
+
+  resetLayer.src = adminProjectImages[0];
+  resetLayer.style.transition = `opacity ${adminProjectFade}ms ease`;
+  currentLayer.style.transition = `opacity ${adminProjectFade}ms ease`;
+  resetLayer.style.opacity = '1';
+  currentLayer.style.opacity = '0';
+  adminProjectActiveLayer = adminProjectActiveLayer === 0 ? 1 : 0;
+  adminProjectIndex = 0;
+}
+
+setAdminProjectDefault();
+if (adminProjectCard) {
+  adminProjectCard.addEventListener('mouseenter', startAdminProjectHoverAnimation);
+  adminProjectCard.addEventListener('mouseleave', stopAdminProjectHoverAnimation);
+}
+
 const glow = document.createElement('div');
 glow.style.position = 'fixed';
 glow.style.width = '250px';
