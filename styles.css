@@ -279,7 +279,10 @@ nav ul li a.active::after {
   object-fit: cover;
   object-position: center;
   transform: translateZ(0);
-  will-change: transform;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  image-rendering: auto;
 }
 
 .hero-content {
@@ -646,6 +649,10 @@ nav ul li a.active::after {
   height: 100%;
   object-fit: cover;
   transition: opacity 650ms ease, transform 0.6s ease;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  will-change: opacity, transform;
+  image-rendering: auto;
 }
 
 .admin-project-card:hover .project-image-wrapper img {
