@@ -180,6 +180,7 @@ const errorMessages = Array.from(contactForm ? contactForm.querySelectorAll('.er
 
 const aiStockAnalyzerImage = document.getElementById('aiStockAnalyzerImage');
 const aiStockImages = [
+  'assets/images/pic1.png',
   'assets/images/pic1.webp',
   'assets/images/pic2.webp',
   'assets/images/pic3.webp',
