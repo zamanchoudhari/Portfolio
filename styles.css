@@ -932,3 +932,7 @@ footer p {
     padding: 15px;
   }
 }
+
+#novaProjectImage {
+  transition: opacity 650ms ease;
+}

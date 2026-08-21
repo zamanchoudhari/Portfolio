@@ -180,6 +180,7 @@ const errorMessages = Array.from(contactForm ? contactForm.querySelectorAll('.er
 
 const aiStockAnalyzerImage = document.getElementById('aiStockAnalyzerImage');
 const aiStockImages = [
+  'assets/images/pic0.png',
   'assets/images/pic1.webp',
   'assets/images/pic2.webp',
   'assets/images/pic3.webp',
@@ -532,6 +533,172 @@ if (adminProjectCard) {
   adminProjectCard.addEventListener('mouseleave', stopAdminProjectHoverAnimation);
 }
 
+/* =========================================================
+   NOVA PROJECT HOVER IMAGE ANIMATION
+   ========================================================= */
+
+const novaProjectCard = document.querySelector('.project-card:has(#novaProjectImage)');
+const novaProjectImage = document.getElementById('novaProjectImage');
+
+const novaProjectImages = [
+  'assets/images/img1.png',
+  'assets/images/img2.png',
+  'assets/images/img3.png',
+  'assets/images/img4.png'
+];
+
+let novaProjectTimer = null;
+let novaProjectIndex = 0;
+let novaProjectRunning = false;
+
+const novaProjectDisplay = 2200;
+const novaProjectFade = 650;
+
+
+/* Preload NOVA images */
+function preloadNovaProjectImages() {
+  novaProjectImages.forEach((src) => {
+    const img = new Image();
+    img.src = src;
+  });
+}
+
+
+/* Set default image */
+function setNovaProjectDefault() {
+  novaProjectIndex = 0;
+
+  if (novaProjectImage) {
+    novaProjectImage.src = novaProjectImages[0];
+    novaProjectImage.style.opacity = '1';
+  }
+}
+
+
+/* Schedule next image */
+function scheduleNovaProjectNext() {
+  if (!novaProjectRunning) return;
+
+  novaProjectTimer = setTimeout(() => {
+    if (!novaProjectRunning || !novaProjectImage) return;
+
+    let nextIndex;
+
+    if (novaProjectIndex === 0) {
+      nextIndex = 1;
+    } else if (novaProjectIndex >= novaProjectImages.length - 1) {
+      nextIndex = 1;
+    } else {
+      nextIndex = novaProjectIndex + 1;
+    }
+
+    const nextSrc = novaProjectImages[nextIndex];
+
+    const tempImage = new Image();
+
+    tempImage.onload = () => {
+
+      novaProjectImage.style.transition =
+        `opacity ${novaProjectFade}ms ease`;
+
+      novaProjectImage.style.opacity = '0';
+
+      setTimeout(() => {
+
+        if (!novaProjectRunning) return;
+
+        novaProjectImage.src = nextSrc;
+
+        requestAnimationFrame(() => {
+          novaProjectImage.style.opacity = '1';
+        });
+
+        novaProjectIndex = nextIndex;
+
+        scheduleNovaProjectNext();
+
+      }, novaProjectFade);
+
+    };
+
+    tempImage.onerror = () => {
+      novaProjectIndex = nextIndex;
+      scheduleNovaProjectNext();
+    };
+
+    tempImage.src = nextSrc;
+
+  }, novaProjectDisplay);
+}
+
+
+/* Start animation */
+function startNovaProjectHoverAnimation() {
+
+  if (
+    !novaProjectCard ||
+    !novaProjectImage ||
+    novaProjectRunning
+  ) {
+    return;
+  }
+
+  novaProjectRunning = true;
+  novaProjectIndex = 0;
+
+  novaProjectImage.src = novaProjectImages[0];
+  novaProjectImage.style.opacity = '1';
+
+  preloadNovaProjectImages();
+  scheduleNovaProjectNext();
+}
+
+
+/* Stop animation and return to img1 */
+function stopNovaProjectHoverAnimation() {
+
+  novaProjectRunning = false;
+
+  if (novaProjectTimer) {
+    clearTimeout(novaProjectTimer);
+    novaProjectTimer = null;
+  }
+
+  if (!novaProjectImage) return;
+
+  novaProjectImage.style.transition =
+    `opacity ${novaProjectFade}ms ease`;
+
+  novaProjectImage.style.opacity = '0';
+
+  setTimeout(() => {
+
+    novaProjectImage.src = novaProjectImages[0];
+    novaProjectIndex = 0;
+
+    requestAnimationFrame(() => {
+      novaProjectImage.style.opacity = '1';
+    });
+
+  }, novaProjectFade);
+}
+
+
+/* Initialize */
+setNovaProjectDefault();
+
+if (novaProjectCard) {
+  novaProjectCard.addEventListener(
+    'mouseenter',
+    startNovaProjectHoverAnimation
+  );
+
+  novaProjectCard.addEventListener(
+    'mouseleave',
+    stopNovaProjectHoverAnimation
+  );
+}
+
 const glow = document.createElement('div');
 glow.style.position = 'fixed';
 glow.style.width = '250px';
@@ -555,5 +722,6 @@ setInterval(() => {
   }
   direction *= -1;
 }, 2500);
+
 
 console.log('Portfolio Developed by Zaman Choudhari');
